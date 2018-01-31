@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<!-- 네임스페이스는 xml파일과 맵핑되는 인터페이스명을 package를 포함해서 명시함. 불일치시 오류 발생 -->    
+<mapper namespace="kr.spring.board.dao.BoardMapper">  
+	<!-- 
+	(주의)컬럼명, 테이블명에 오류가 있을 때는 에러 메시지가 보여지지 않고 콘솔에 sql-error-codes.xml 출력됨 
+	
+	id는 MemberMapper의 연동하고자하는 메서드명
+	parameterType은 파라미터로 전달되는 객체의 타입(java.util.Map) 또는 알리아스(map)
+	resultType은 반환되는 객체의 타입(kr.spring.member.domain.MemberCommand) 또는 알리아스(memberCommand)
+	
+	반환되는 타입은 interface의 abstract method에서 확인
+	 -->
+	<select id="list" parameterType="map" resultType="boardCommand">
+		SELECT
+			*
+		FROM(SELECT a.*,rownum rnum
+			FROM (SELECT *
+			FROM spboard 
+			ORDER BY num DESC)a)
+		<![CDATA[
+		WHERE rnum >= #{start} AND rnum <= #{end} 
+		]]>
+	</select>
+	
+	<select id="getRowCount" parameterType="map" resultType="integer">
+		SELECT
+			count(*)
+		FROM spboard
+	</select>
+ </mapper>
+
+
+
+
+
+
+
